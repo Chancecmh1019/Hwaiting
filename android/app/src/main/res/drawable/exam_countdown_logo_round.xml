@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 圓形背景 -->
+    <path
+        android:fillColor="#ECEFF1"
+        android:pathData="M54,54m-54,0a54,54 0,1 1,108 0a54,54 0,1 1,-108 0" />
+
+    <!-- 沙漏主體 -->
+    <path
+        android:fillColor="#546E7A"
+        android:pathData="M40,28Q40,24 44,24h20q4,0 4,4v12l-10,10l10,10v12q0,4 -4,4H44q-4,0 -4,-4V64l10,-10l-10,-10V28z" />
+
+    <!-- 上沙 -->
+    <path
+        android:fillColor="#F06292"
+        android:pathData="M44,28h20v10L54,48L44,38z" />
+
+    <!-- 下沙 -->
+    <path
+        android:fillColor="#F8BBD0"
+        android:pathData="M44,70L54,60L64,70v6H44z" />
+
+    <!-- 中心沙流 -->
+    <path
+        android:fillColor="#F06292"
+        android:pathData="M53.5,48h1L54,60h-1z" />
+
+</vector>

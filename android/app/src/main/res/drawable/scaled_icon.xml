@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <bitmap 
+            android:src="@drawable/app_icon"
+            android:gravity="center"
+            android:tint="#00000000"
+            android:tintMode="src_in" />
+    </item>
+    <item
+        android:left="24dp"
+        android:top="24dp"
+        android:right="24dp"
+        android:bottom="24dp">
+        <bitmap 
+            android:src="@drawable/app_icon"
+            android:gravity="center" />
+    </item>
+</layer-list> 

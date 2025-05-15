@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 背景 -->
+    <path
+        android:fillColor="#ECEFF1"
+        android:pathData="M0,0h108v108h-108z" />
+
+    <!-- 沙漏外框 -->
+    <path
+        android:fillColor="#546E7A"
+        android:pathData="M40,20L68,20Q72,20 72,24L72,40L60,54L72,68L72,84Q72,88 68,88L40,88Q36,88 36,84L36,68L48,54L36,40L36,24Q36,20 40,20z" />
+
+    <!-- 上半沙 - 代表剩餘時間 -->
+    <path
+        android:fillColor="#F06292"
+        android:pathData="M42,24L66,24L66,38L54,50L42,38z" />
+
+    <!-- 下半沙 - 已流逝的時間 -->
+    <path
+        android:fillColor="#F8BBD0"
+        android:pathData="M42,70L54,58L66,70L66,84L42,84z" />
+
+    <!-- 沙流 -->
+    <path
+        android:fillColor="#F06292"
+        android:pathData="M53,50L55,50L54,58L53,58z" />
+
+</vector>

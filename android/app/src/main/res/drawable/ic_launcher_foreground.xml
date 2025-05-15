@@ -1,0 +1,88 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:scaleX="0.65"
+        android:scaleY="0.65"
+        android:translateX="31"
+        android:translateY="31">
+        
+        <!-- 圓形時鐘外框 -->
+        <path
+            android:fillColor="#00000000"
+            android:strokeColor="#E0E0E0"
+            android:strokeWidth="2.5"
+            android:pathData="M70,35C70,54.33 54.33,70 35,70C15.67,70 0,54.33 0,35C0,15.67 15.67,0 35,0C54.33,0 70,15.67 70,35Z" />
+            
+        <!-- 中心點 -->
+        <path
+            android:fillColor="#114B5F"
+            android:pathData="M35,35m-2.5,0a2.5,2.5 0,1 1,5 0a2.5,2.5 0,1 1,-5 0" />
+            
+        <!-- 時針 (指向2點的方向) -->
+        <path
+            android:fillColor="#00000000"
+            android:strokeColor="#114B5F"
+            android:strokeWidth="2"
+            android:strokeLineCap="round"
+            android:pathData="M35,35L50,20" />
+            
+        <!-- 分針 (指向10點的方向) -->
+        <path
+            android:fillColor="#00000000"
+            android:strokeColor="#114B5F"
+            android:strokeWidth="1.5"
+            android:strokeLineCap="round"
+            android:pathData="M35,35L20,20" />
+            
+        <!-- 秒針 (指向6點的方向) -->
+        <path
+            android:fillColor="#00000000"
+            android:strokeColor="#F06B6B"
+            android:strokeWidth="1"
+            android:strokeLineCap="round"
+            android:pathData="M35,35L35,60" />
+            
+        <!-- 刻度 - 12點 -->
+        <path
+            android:fillColor="#114B5F"
+            android:pathData="M35,5L35,10" />
+            
+        <!-- 刻度 - 3點 -->
+        <path
+            android:fillColor="#114B5F"
+            android:pathData="M65,35L60,35" />
+            
+        <!-- 刻度 - 6點 -->
+        <path
+            android:fillColor="#114B5F"
+            android:pathData="M35,65L35,60" />
+            
+        <!-- 刻度 - 9點 -->
+        <path
+            android:fillColor="#114B5F"
+            android:pathData="M5,35L10,35" />
+            
+        <!-- 數字 12 -->
+        <path
+            android:fillColor="#114B5F"
+            android:pathData="M32,12L32,9L38,9L38,10L33,10L33,11L37,11L37,14L32,14L32,13L36,13L36,12L32,12Z" />
+            
+        <!-- 數字 3 -->
+        <path
+            android:fillColor="#114B5F"
+            android:pathData="M56,34L56,36L61,36L61,38L56,38L56,37L60,37L60,36L56,36L56,34L61,34L61,35L56,35Z" />
+            
+        <!-- 數字 6 -->
+        <path
+            android:fillColor="#114B5F"
+            android:pathData="M35,56L33,56L33,61L38,61L38,56L36,56L36,60L34,60L34,56L35,56Z" />
+            
+        <!-- 數字 9 -->
+        <path
+            android:fillColor="#114B5F"
+            android:pathData="M14,34L14,36L9,36L9,38L14,38L14,37L10,37L10,36L14,36L14,34L9,34L9,35L14,35Z" />
+    </group>
+</vector> 
