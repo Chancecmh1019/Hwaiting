@@ -118,10 +118,3 @@ android/
 ## 📄 授權協議
 
 本專案採用 MIT 授權協議 - 詳見 [LICENSE](LICENSE) 文件
-
----
-
-<div align="center">
-  <sub>以積極態度迎接會考挑戰 - Hwaiting! 加油!</sub>
-</div>
-# Hwaiting
