@@ -1,10 +1,5 @@
 # Hwaiting - 國中教育會考倒數計時器
 
-<div align="center">
-  <img src="android/app/src/main/res/drawable/app_icon.png" alt="Hwaiting Logo" width="120">
-  <h3>為台灣國中生打造的會考倒數計時應用程式</h3>
-</div>
-
 ## 📱 應用介紹
 
 Hwaiting（加油）是一款專為台灣國中學生設計的會考倒數計時應用程式，透過精確的倒數計時和桌面小工具功能，幫助學生更好地掌握備考時間，以積極正向的心態迎接國中教育會考。
