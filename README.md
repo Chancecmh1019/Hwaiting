@@ -13,21 +13,6 @@ Hwaiting（加油）是一款專為台灣國中學生設計的會考倒數計時
 - **鼓勵提示**：根據剩餘時間提供不同的鼓勵話語
 - **深色模式支援**：符合Android Material Design 3設計規範
 
-## 📸 應用截圖
-
-<div align="center">
-  <table>
-    <tr>
-      <td align="center"><b>主頁面</b></td>
-      <td align="center"><b>桌面小工具</b></td>
-    </tr>
-    <tr>
-      <td><img src="screenshots/main_screen.jpg" alt="主頁面" width="250"/></td>
-      <td><img src="screenshots/widget.jpg" alt="桌面小工具" width="250"/></td>
-    </tr>
-  </table>
-</div>
-
 ## 🔧 技術架構
 
 - **前端技術**：Flutter Framework
@@ -45,12 +30,7 @@ Hwaiting（加油）是一款專為台灣國中學生設計的會考倒數計時
 
 ## 📥 安裝方式
 
-### 方法一：直接下載 APK
-1. 前往 [Releases](https://github.com/您的用戶名/Hwaiting/releases) 頁面
-2. 下載最新版本的 APK 檔案
-3. 在Android裝置上安裝（可能需要允許「未知來源」應用安裝權限）
-
-### 方法二：從原始碼構建
+### 從原始碼構建
 1. 確保已安裝 [Flutter SDK](https://flutter.dev/docs/get-started/install)
 2. 複製此專案
    ```bash
@@ -118,15 +98,6 @@ android/
 - **定時更新**：使用定時器確保小工具數據定期更新
 - **響應式UI**：採用 Flutter 的響應式設計保證不同螢幕尺寸的適配性
 
-## 🧩 未來規劃
-
-- [ ] 多種小工具佈局樣式
-- [ ] 會考科目倒數（各科衝刺倒計時）
-- [ ] 重要日期標記與提醒
-- [ ] iOS平台支援
-- [ ] 學習計畫制定與追蹤功能
-- [ ] 會考相關資訊整合
-
 ## 🤝 貢獻指南
 
 我們歡迎任何形式的貢獻，無論是新功能、錯誤修復還是文檔改進：
@@ -147,12 +118,6 @@ android/
 ## 📄 授權協議
 
 本專案採用 MIT 授權協議 - 詳見 [LICENSE](LICENSE) 文件
-
-## 👨‍💻 開發者
-
-- 開發者：[您的姓名/暱稱]
-- Email：[您的電子郵件]
-- GitHub：[@您的GitHub用戶名](https://github.com/您的GitHub用戶名)
 
 ---
 
