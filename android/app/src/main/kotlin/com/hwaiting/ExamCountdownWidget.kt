@@ -32,48 +32,7 @@ class ExamCountdownWidget : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
-        // 設置每秒更新的鬧鐘
-        setupUpdateAlarm(context)
-        // 初始化Flutter引擎
-        flutterEngine = FlutterEngine(context)
-        
-        // 使用正確的Dart入口點
-        val flutterLoader = FlutterInjector.instance().flutterLoader()
-        val dartEntrypoint = DartExecutor.DartEntrypoint(
-            flutterLoader.findAppBundlePath(),
-            "main"
-        )
-        flutterEngine.dartExecutor.executeDartEntrypoint(dartEntrypoint)
-
-        // 建立與Flutter的通訊管道
-        channel = MethodChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            "com.hwaiting/widget"
-        )
-        
-        // 設置方法調用處理器
-        channel.setMethodCallHandler { call, result ->
-            when (call.method) {
-                "updateWidget" -> {
-                    // 請求更新所有小工具
-                    val appWidgetManager = AppWidgetManager.getInstance(context)
-                    val thisAppWidgetIds = appWidgetManager.getAppWidgetIds(
-                        android.content.ComponentName(context, ExamCountdownWidget::class.java)
-                    )
-                    
-                    // 更新所有小工具
-                    thisAppWidgetIds.forEach { appWidgetId ->
-                        updateAppWidget(context, appWidgetManager, appWidgetId)
-                    }
-                    
-                    result.success(true)
-                }
-                else -> result.notImplemented()
-            }
-        }
-
-        // 更新所有小工具實例
-        appWidgetIds.forEach { appWidgetId ->
+        for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
     }
@@ -83,102 +42,54 @@ class ExamCountdownWidget : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int
     ) {
-        val views = RemoteViews(context.packageName, R.layout.widget_exam_countdown)
+        val views = RemoteViews(context.packageName, R.layout.exam_countdown_widget)
 
         try {
             // 從 home_widget 套件獲取數據
             val prefs = HomeWidgetPlugin.getData(context)
             val examYear = prefs.getString("exam_year", "未設定年份")
-            val examDate = prefs.getString("exam_date", "未設定日期")
-            val countdownDays = prefs.getString("countdown_days", "未知天數")
+            val examDate = prefs.getString("exam_date_formatted", "未設定日期")
+            val countdownDays = prefs.getString("countdown_days", "0")
             
             // 更新 UI
-            views.setTextViewText(R.id.widget_title, "國中會考倒數")
+            views.setTextViewText(R.id.widget_main_title, "國中教育會考")
             views.setTextViewText(R.id.widget_exam_year, "${examYear}國中會考")
             views.setTextViewText(R.id.widget_exam_date, examDate)
-            views.setTextViewText(R.id.widget_countdown, countdownDays)
+            
+            // 確保倒數天數顯示正確
+            val days = countdownDays?.toIntOrNull() ?: 0
+            if (days > 0) {
+                views.setTextViewText(R.id.widget_countdown, days.toString())
+            } else {
+                views.setTextViewText(R.id.widget_countdown, "0")
+            }
             
             // 如果點擊小工具，打開應用
             val pendingIntent = createOpenAppIntent(context)
-            views.setOnClickPendingIntent(R.id.widget_title, pendingIntent)
+            views.setOnClickPendingIntent(R.id.widget_root, pendingIntent)
             
             // 更新小工具
             appWidgetManager.updateAppWidget(appWidgetId, views)
         } catch (e: Exception) {
-            // 更新失敗，使用 MethodChannel 獲取數據
-        channel.invokeMethod("getRemainingTime", null, object : MethodChannel.Result {
-            override fun success(result: Any?) {
-                    val remainingTime = result as? Map<*, *>
-                    val days = remainingTime?.get("days") as? Int ?: 0
-                    
-                    // 從 Flutter 獲取會考年份和日期
-                channel.invokeMethod("formatExamDateForWidget", null, object : MethodChannel.Result {
-                    override fun success(dateResult: Any?) {
-                            val examInfo = dateResult as? Map<*, *>
-                            val examYear = examInfo?.get("year") as? String ?: "未知年份"
-                            val examDate = examInfo?.get("date") as? String ?: "未知日期"
-    
-                            // 更新 UI
-                            views.setTextViewText(R.id.widget_title, "國中會考倒數")
-                            views.setTextViewText(R.id.widget_exam_year, "${examYear}國中會考")
-                        views.setTextViewText(R.id.widget_exam_date, examDate)
-                        views.setTextViewText(
-                            R.id.widget_countdown,
-                            "${days}天"
-                        )
-                            
-                            // 設置點擊事件
-                            val pendingIntent = createOpenAppIntent(context)
-                            views.setOnClickPendingIntent(R.id.widget_title, pendingIntent)
-                            
-                        appWidgetManager.updateAppWidget(appWidgetId, views)
-                    }
-
-                    override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-                            views.setTextViewText(R.id.widget_title, "國中會考倒數")
-                            views.setTextViewText(R.id.widget_exam_year, "載入失敗國中會考")
-                        views.setTextViewText(R.id.widget_exam_date, "載入日期失敗")
-                        views.setTextViewText(
-                            R.id.widget_countdown,
-                            "${days}天"
-                        )
-                        appWidgetManager.updateAppWidget(appWidgetId, views)
-                    }
-
-                    override fun notImplemented() {
-                            views.setTextViewText(R.id.widget_title, "國中會考倒數")
-                            views.setTextViewText(R.id.widget_exam_year, "未實現國中會考")
-                        views.setTextViewText(R.id.widget_exam_date, "功能未實現")
-                        views.setTextViewText(
-                            R.id.widget_countdown,
-                            "${days}天"
-                        )
-                        appWidgetManager.updateAppWidget(appWidgetId, views)
-                    }
-                })
-            }
-
-            override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-                views.setTextViewText(R.id.widget_countdown, "載入失敗: $errorMessage")
-                appWidgetManager.updateAppWidget(appWidgetId, views)
-            }
-
-            override fun notImplemented() {
-                views.setTextViewText(R.id.widget_countdown, "功能未實現")
-                appWidgetManager.updateAppWidget(appWidgetId, views)
-            }
-        })
+            // 發生錯誤時顯示預設值
+            views.setTextViewText(R.id.widget_main_title, "國中教育會考")
+            views.setTextViewText(R.id.widget_exam_year, "未設定年份")
+            views.setTextViewText(R.id.widget_exam_date, "未設定日期")
+            views.setTextViewText(R.id.widget_countdown, "0")
+            appWidgetManager.updateAppWidget(appWidgetId, views)
         }
     }
     
     // 建立打開 App 的 Intent
-    private fun createOpenAppIntent(context: Context): PendingIntent {
-        val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-        } else {
-            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        }
+    private fun createOpenAppIntent(context: Context): android.app.PendingIntent {
+        val packageManager = context.packageManager
+        val intent = packageManager.getLaunchIntentForPackage(context.packageName)
+        return android.app.PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
+        )
     }
 
     override fun onDisabled(context: Context) {

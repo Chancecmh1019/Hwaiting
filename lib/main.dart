@@ -1,48 +1,126 @@
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
 import 'screens/countdown_screen.dart';
+import 'screens/study_progress_screen.dart';
+import 'screens/main_screen.dart';
 import 'utils/widget_service.dart';
+import 'utils/study_progress_tracker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // 初始化桌面小工具服務
-  await WidgetService.init();
+  // 設定錯誤處理
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    debugPrint('錯誤: ${details.exception}');
+    debugPrint('堆疊追蹤: ${details.stack}');
+  };
   
-  // 啟動後立即強制更新小工具
-  await WidgetService.forceUpdateWidget();
-  
-  // 監聽小工具點擊事件
-  HomeWidget.widgetClicked.listen((uri) {
-    // 處理小工具點擊事件
-    print('小工具被點擊: $uri');
-    // 點擊後立即更新
-    WidgetService.forceUpdateWidget();
+  // 設定全域異常處理
+  runZonedGuarded(() async {
+    // 初始化服務
+    await _initializeServices();
+    
+    // 運行應用程式
+    runApp(const MyApp());
+  }, (error, stack) {
+    debugPrint('未處理的錯誤: $error');
+    debugPrint('錯誤堆疊: $stack');
   });
-  
-  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+Future<void> _initializeServices() async {
+  try {
+    // 初始化 SharedPreferences
+    await SharedPreferences.getInstance();
+    
+    // 初始化小工具服務
+    await WidgetService.init();
+    
+    // 初始化學習進度追蹤
+    await StudyProgressTracker.initialize();
+    
+    // 設定系統UI
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+    
+    // 設定螢幕方向
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  } catch (e) {
+    debugPrint('初始化服務失敗: $e');
+  }
+}
+
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ThemeMode _themeMode = ThemeMode.system;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadThemeMode();
+  }
+
+  // 從SharedPreferences加載主題模式設置
+  Future<void> _loadThemeMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    final themeModeIndex = prefs.getInt('theme_mode') ?? 0;
+    setState(() {
+      _themeMode = ThemeMode.values[themeModeIndex];
+    });
+  }
+
+  // 保存主題模式設置到SharedPreferences
+  Future<void> _saveThemeMode(ThemeMode mode) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('theme_mode', mode.index);
+  }
+
+  // 切換主題模式
+  void _toggleThemeMode(ThemeMode mode) {
+    setState(() {
+      _themeMode = mode;
+    });
+    _saveThemeMode(mode);
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '國中教育會考倒數計時',
+      title: '會考倒數',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,
           brightness: Brightness.light,
-          secondary: Colors.amber,
-          secondaryContainer: const Color(0xFFE0F7FA), // 淺藍色背景
-          onSecondaryContainer: const Color(0xFF00565E), // 深藍色文字
         ),
+        useMaterial3: true,
       ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
+      ),
+      themeMode: _themeMode,
+      home: MainScreen(toggleThemeMode: _toggleThemeMode),
       debugShowCheckedModeBanner: false,
-      home: const CountdownScreen(),
     );
   }
 }

@@ -32,7 +32,6 @@ class ExamCountdownCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // 標題置中顯示
               Text(
                 title,
                 style: TextStyle(
@@ -43,20 +42,18 @@ class ExamCountdownCard extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
-              // 時間單位置中顯示，使用Row確保排成一行
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildTimeCard(context, '天', remainingTime['days'] ?? 0),
-                  const SizedBox(width: 4),
-                  _buildTimeCard(context, '小時', remainingTime['hours'] ?? 0),
-                  const SizedBox(width: 4),
-                  _buildTimeCard(context, '分鐘', remainingTime['minutes'] ?? 0),
-                  const SizedBox(width: 4),
-                  _buildTimeCard(context, '秒鐘', remainingTime['seconds'] ?? 0),
+                  _buildTimeUnit(context, '天', remainingTime['days'] ?? 0),
+                  _buildSeparator(context),
+                  _buildTimeUnit(context, '時', remainingTime['hours'] ?? 0),
+                  _buildSeparator(context),
+                  _buildTimeUnit(context, '分', remainingTime['minutes'] ?? 0),
+                  _buildSeparator(context),
+                  _buildTimeUnit(context, '秒', remainingTime['seconds'] ?? 0),
                 ],
               ),
-              // 如果有狀態訊息但不為空，才顯示
               if (statusMessage.isNotEmpty) ...[
                 const SizedBox(height: 20),
                 Text(
@@ -76,74 +73,69 @@ class ExamCountdownCard extends StatelessWidget {
     );
   }
 
-  Widget _buildTimeCard(BuildContext context, String unit, int value) {
+  Widget _buildTimeUnit(BuildContext context, String unit, int value) {
     final colorScheme = Theme.of(context).colorScheme;
-    
-    // 縮小容器寬度，使四個卡片能排成一行
-    double width = 65.0;
-    if (unit == '天') width = 70.0;
-    else if (unit == '小時') width = 68.0;
-    else if (unit == '分鐘') width = 67.0;
-    
-    // 調整字體大小
-    double valueFontSize = 22.0;
-    if (unit == '天') {
-      if (value >= 1000) valueFontSize = 18.0;
-      else if (value >= 100) valueFontSize = 20.0;
-    } else if (value >= 10) {
-      valueFontSize = 20.0;
-    }
-    
+    final valueText = value.toString();
+    final fontSize = valueText.length > 2 ? 20.0 : 24.0;
+
     return Container(
-      width: width,
-      height: 90, // 稍微縮小高度
-      margin: const EdgeInsets.symmetric(horizontal: 2), // 減小外邊距
+      width: 60,
+      height: 70,
       decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
+        color: colorScheme.surfaceVariant,
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: colorScheme.shadow.withOpacity(0.15),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
+            color: colorScheme.shadow.withOpacity(0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
           ),
         ],
-        border: Border.all(
-          color: colorScheme.primary.withOpacity(0.2),
-          width: 1.5,
-        ),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // 數字顯示更大
           Text(
-            value.toString(),
+            valueText,
             style: TextStyle(
-              fontSize: valueFontSize,
+              fontSize: fontSize,
               fontWeight: FontWeight.bold,
               color: colorScheme.primary,
+              height: 1.1,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
-          // 單位顯示
+          const SizedBox(height: 4),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             decoration: BoxDecoration(
               color: colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
               unit,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: colorScheme.onPrimaryContainer,
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSeparator(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Text(
+        ':',
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+        ),
       ),
     );
   }

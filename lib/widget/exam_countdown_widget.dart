@@ -10,9 +10,9 @@ class ExamCountdownWidget {
     _channel.setMethodCallHandler((call) async {
       switch (call.method) {
         case 'getRemainingTime':
-          return await ExamDateCalculator.getRemainingTime();
+          return await ExamDateCalculator().getRemainingTime();
         case 'formatExamDateForWidget':
-          return await ExamDateCalculator.formatExamDateForWidget();
+          return await ExamDateCalculator().formatExamDateForWidget();
         default:
           throw MissingPluginException();
       }
