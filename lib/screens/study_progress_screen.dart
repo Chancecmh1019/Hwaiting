@@ -45,13 +45,13 @@ class _StudyProgressScreenState extends State<StudyProgressScreen> {
     '社會': null,
     '自然': null,
   };
-
+  
   @override
   void initState() {
     super.initState();
     _loadData();
   }
-
+  
   Future<void> _loadData() async {
     await _loadProgress();
     await _loadGoals();
@@ -129,7 +129,7 @@ class _StudyProgressScreenState extends State<StudyProgressScreen> {
   }
 
   void _updateProgress(String subject, double value) {
-    setState(() {
+      setState(() {
       _progress[subject] = value;
       _lastUpdated[subject] = DateTime.now();
     });
@@ -145,7 +145,7 @@ class _StudyProgressScreenState extends State<StudyProgressScreen> {
   }
 
   void _updateNote(String subject, String note) {
-    setState(() {
+      setState(() {
       _notes[subject] = note;
     });
     _saveNotes();
@@ -184,35 +184,35 @@ class _StudyProgressScreenState extends State<StudyProgressScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // 總體進度卡片
-            Card(
+        children: [
+          // 總體進度卡片
+          Card(
               elevation: 2,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
+                children: [
+                  Text(
                           '總體進度',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                         Text(
                           '${overallProgress.toInt()}%',
                           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             color: colorScheme.primary,
                             fontWeight: FontWeight.bold,
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
                     CircularPercentIndicator(
                       radius: 80.0,
                       lineWidth: 16.0,
@@ -265,7 +265,7 @@ class _StudyProgressScreenState extends State<StudyProgressScreen> {
                                       subjects[value.toInt()],
                                       style: const TextStyle(
                                         fontSize: 12,
-                                        fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   );
@@ -295,27 +295,27 @@ class _StudyProgressScreenState extends State<StudyProgressScreen> {
                                   width: 20,
                                   borderRadius: const BorderRadius.vertical(
                                     top: Radius.circular(6),
-                                  ),
-                                ),
-                              ],
+                            ),
+                          ),
+                        ],
                             );
                           }).toList(),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                ],
               ),
             ),
+          ),
             const SizedBox(height: 24),
             // 各科目進度卡片
             ..._progress.entries.map((entry) => Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: _buildSubjectCard(context, entry.key, colorScheme),
             )),
-          ],
-        ),
-      ),
+              ],
+            ),
+          ),
     );
   }
 
@@ -325,10 +325,10 @@ class _StudyProgressScreenState extends State<StudyProgressScreen> {
     final formattedDate = lastUpdated != null 
         ? '${lastUpdated.year}/${lastUpdated.month}/${lastUpdated.day}'
         : '尚未更新';
-
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
+                      
+                      return Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
       child: ExpansionTile(
@@ -346,21 +346,21 @@ class _StudyProgressScreenState extends State<StudyProgressScreen> {
         ),
         children: [
           Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                 // 進度條
                 LinearPercentIndicator(
                   lineHeight: 20.0,
                   percent: progress / 100,
                   center: Text(
                     '${progress.toInt()}%',
-                    style: const TextStyle(
+                                        style: const TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                   progressColor: _getSubjectColor(subject, colorScheme),
                   backgroundColor: colorScheme.surfaceVariant,
                   barRadius: const Radius.circular(10),
@@ -405,10 +405,10 @@ class _StudyProgressScreenState extends State<StudyProgressScreen> {
                   maxLines: 3,
                   controller: TextEditingController(text: _notes[subject]),
                   onChanged: (value) => _updateNote(subject, value),
-                ),
-              ],
-            ),
-          ),
+                                ),
+                              ],
+                            ),
+                          ),
         ],
       ),
     );
@@ -445,7 +445,7 @@ class _StudyProgressScreenState extends State<StudyProgressScreen> {
       ),
     );
   }
-
+  
   Color _getSubjectColor(String subject, ColorScheme colorScheme) {
     switch (subject) {
       case '國文': return Colors.red;
