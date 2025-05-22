@@ -447,6 +447,7 @@ class _CountdownScreenState extends State<CountdownScreen> {
       
       // 設定通知
       await _notificationService.scheduleNotification(
+        id: 1, // 添加缺少的id參數
         title: '會考提醒',
         body: '距離 $_selectedExamYear 年會考還有 $result 天，請做好準備！',
         scheduledDate: reminderDate,
