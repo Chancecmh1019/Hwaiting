@@ -34,7 +34,7 @@ Hwaiting（加油）是一款專為台灣國中學生設計的會考倒數計時
 1. 確保已安裝 [Flutter SDK](https://flutter.dev/docs/get-started/install)
 2. 複製此專案
    ```bash
-   git clone https://github.com/yourusername/hwaiting.git
+   git clone https://github.com/Chancecmh1019/Hwaiting.git
    ```
 3. 安裝依賴：
    ```bash
