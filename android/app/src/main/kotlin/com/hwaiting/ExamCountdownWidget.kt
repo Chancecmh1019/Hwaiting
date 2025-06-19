@@ -21,7 +21,7 @@ import es.antonborri.home_widget.HomeWidgetPlugin
 class ExamCountdownWidget : AppWidgetProvider() {
     companion object {
         private const val ACTION_UPDATE_WIDGET = "com.hwaiting.ACTION_UPDATE_WIDGET"
-        private const val UPDATE_INTERVAL_MS = 1000L // 每秒更新一次
+        private const val UPDATE_INTERVAL_MS = 3600000L // 每小時更新一次 (1小時 = 3600000毫秒)
     }
     private val executor = Executors.newSingleThreadExecutor()
     private lateinit var channel: MethodChannel
@@ -52,7 +52,6 @@ class ExamCountdownWidget : AppWidgetProvider() {
             val countdownDays = prefs.getString("countdown_days", "0")
             
             // 更新 UI
-            views.setTextViewText(R.id.widget_main_title, "國中教育會考")
             views.setTextViewText(R.id.widget_exam_year, "${examYear}國中會考")
             views.setTextViewText(R.id.widget_exam_date, examDate)
             
@@ -64,6 +63,9 @@ class ExamCountdownWidget : AppWidgetProvider() {
                 views.setTextViewText(R.id.widget_countdown, "0")
             }
             
+            // 隱藏主標題，只顯示年份和天數
+            views.setTextViewText(R.id.widget_exam_year, "${examYear}年會考")
+            
             // 如果點擊小工具，打開應用
             val pendingIntent = createOpenAppIntent(context)
             views.setOnClickPendingIntent(R.id.widget_root, pendingIntent)
@@ -72,7 +74,6 @@ class ExamCountdownWidget : AppWidgetProvider() {
             appWidgetManager.updateAppWidget(appWidgetId, views)
         } catch (e: Exception) {
             // 發生錯誤時顯示預設值
-            views.setTextViewText(R.id.widget_main_title, "國中教育會考")
             views.setTextViewText(R.id.widget_exam_year, "未設定年份")
             views.setTextViewText(R.id.widget_exam_date, "未設定日期")
             views.setTextViewText(R.id.widget_countdown, "0")

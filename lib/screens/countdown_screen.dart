@@ -3,12 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz_data;
 import '../utils/exam_date_calculator.dart';
 import '../utils/widget_service.dart';
-import '../utils/notification_service.dart';
 
 class CountdownScreen extends StatefulWidget {
   final Function(ThemeMode)? toggleThemeMode;
@@ -24,8 +20,6 @@ class _CountdownScreenState extends State<CountdownScreen> {
   int _selectedExamYear = 0;
   bool _isFirstLoad = true;
   
-  // 通知服務
-  final NotificationService _notificationService = NotificationService();
   Map<String, int> _remainingTime = {
     'days': 0,
     'hours': 0,
@@ -47,7 +41,6 @@ class _CountdownScreenState extends State<CountdownScreen> {
   void initState() {
     super.initState();
     _initializeData();
-    _initializeNotifications();
   }
 
   Future<void> _initializeData() async {
@@ -217,10 +210,7 @@ class _CountdownScreenState extends State<CountdownScreen> {
     }
   }
   
-  /// 初始化通知
-  Future<void> _initializeNotifications() async {
-    await _notificationService.initialize();
-  }
+
   
   /// 分享倒數計時
   void _shareCountdown() {
@@ -391,86 +381,7 @@ class _CountdownScreenState extends State<CountdownScreen> {
     }
   }
   
-  /// 設定通知
-  Future<void> _setNotification() async {
-    if (_examDate == null) return;
 
-    // 顯示通知設定對話框
-    final result = await showDialog<int>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('設定會考提醒'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('請選擇要提前幾天收到通知：'),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                _buildNotificationOption(1),
-                _buildNotificationOption(3),
-                _buildNotificationOption(7),
-                _buildNotificationOption(14),
-                _buildNotificationOption(30),
-              ],
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('取消'),
-          ),
-        ],
-      ),
-    );
-    
-    if (result != null && _examDate != null) {
-      // 計算提醒時間
-      final reminderDate = _examDate!.subtract(Duration(days: result));
-      
-      // 如果提醒時間已經過了，顯示錯誤
-      if (reminderDate.isBefore(DateTime.now())) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('無法設定已過期的提醒時間'),
-              backgroundColor: Colors.red,
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        }
-        return;
-      }
-      
-      // 設定通知
-      await _notificationService.scheduleNotification(
-        id: 1, // 添加缺少的id參數
-        title: '會考提醒',
-        body: '距離 $_selectedExamYear 年會考還有 $result 天，請做好準備！',
-        scheduledDate: reminderDate,
-      );
-      
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('已設定會考前 $result 天提醒通知'),
-            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
-    }
-  }
-
-  Widget _buildNotificationOption(int days) {
-    return ElevatedButton(
-      onPressed: () => Navigator.pop(context, days),
-      child: Text('$days 天'),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -776,19 +687,6 @@ class _CountdownScreenState extends State<CountdownScreen> {
                               style: FilledButton.styleFrom(
                                 backgroundColor: colorScheme.secondaryContainer,
                                 foregroundColor: colorScheme.onSecondaryContainer,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: FilledButton.tonalIcon(
-                              onPressed: _setNotification,
-                              icon: const Icon(Icons.notifications),
-                              label: const Text('設定提醒'),
-                              style: FilledButton.styleFrom(
-                                backgroundColor: colorScheme.tertiaryContainer,
-                                foregroundColor: colorScheme.onTertiaryContainer,
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                               ),
                             ),

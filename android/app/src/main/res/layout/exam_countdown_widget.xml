@@ -5,58 +5,54 @@
     android:layout_height="match_parent"
     android:background="@drawable/widget_background"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:gravity="center">
 
-    <!-- 大標題 -->
-    <TextView
-        android:id="@+id/widget_main_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="國中教育會考"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <!-- 中標題 -->
+    <!-- 會考年份 -->
     <TextView
         android:id="@+id/widget_exam_year"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-            android:gravity="center"
+        android:gravity="center"
         android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
-    <!-- 小標題：考試日期 -->
+    <!-- 倒數天數與單位 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="8dp">
+        
         <TextView
-        android:id="@+id/widget_exam_date"
-            android:layout_width="match_parent"
+            android:id="@+id/widget_countdown"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:gravity="center"
-                    android:textColor="#CCFFFFFF"
+            android:textColor="#FFFFFF"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="天"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="6dp" />
+    </LinearLayout>
+    
+    <!-- 考試日期 -->
+    <TextView
+        android:id="@+id/widget_exam_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textColor="#CCFFFFFF"
         android:textSize="14sp" />
 
-    <!-- 倒數天數 -->
-                <TextView
-        android:id="@+id/widget_countdown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-        android:gravity="center"
-                    android:textColor="#FFFFFF"
-        android:textSize="32sp"
-                    android:textStyle="bold" />
-    
-    <!-- 天數單位 -->
-                <TextView
-        android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="天"
-                    android:textColor="#CCFFFFFF"
-        android:textSize="16sp" />
-
-</LinearLayout> 
+</LinearLayout>

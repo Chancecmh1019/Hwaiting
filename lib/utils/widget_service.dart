@@ -2,7 +2,6 @@ import 'package:home_widget/home_widget.dart';
 import 'dart:async';
 import 'exam_date_calculator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'notification_service.dart';
 
 /// 桌面小工具更新服務
 class WidgetService {
@@ -38,8 +37,8 @@ class WidgetService {
     // 取消之前的計時器（如果有的話）
     _updateTimer?.cancel();
     
-    // 創建新的計時器，每分鐘更新一次小工具
-    _updateTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
+    // 創建新的計時器，每小時更新一次小工具
+    _updateTimer = Timer.periodic(const Duration(hours: 1), (timer) {
       updateWidget();
     });
     
@@ -84,8 +83,8 @@ class WidgetService {
       // 獲取考試日期計算器
       final calculator = ExamDateCalculator();
       
-      // 獲取剩餘時間
-      final remainingTime = await calculator.getRemainingTime();
+      // 獲取剩餘時間（向上取整的天數）
+      final remainingDays = await calculator.getRemainingDaysRoundedUp();
       
       // 獲取考試日期
       final examDate = await calculator.getNextExamDate();
@@ -99,10 +98,10 @@ class WidgetService {
       // 獲取考試日期格式化
       final examDateFormatted = await calculator.formatExamDate();
       
-      print('更新小工具數據: 年份=$examYear, 狀態=$examStatus, 倒數=${remainingTime.toString()}, 日期=$examDateFormatted');
+      print('更新小工具數據: 年份=$examYear, 狀態=$examStatus, 倒數天數(向上取整)=$remainingDays, 日期=$examDateFormatted');
       
       // 更新小工具數據
-      await HomeWidget.saveWidgetData('countdown_days', remainingTime['days'].toString());
+      await HomeWidget.saveWidgetData('countdown_days', remainingDays.toString());
       await HomeWidget.saveWidgetData('exam_date', examDate?.toIso8601String());
       await HomeWidget.saveWidgetData('exam_year', examYear.toString());
       await HomeWidget.saveWidgetData('exam_status', examStatus);

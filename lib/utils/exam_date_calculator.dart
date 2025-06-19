@@ -135,6 +135,28 @@ class ExamDateCalculator {
     };
   }
   
+  /// 計算從現在到會考的剩餘天數（向上取整）
+  /// 例如：剩餘5天3小時，則返回6天
+  Future<int> getRemainingDaysRoundedUp() async {
+    final now = DateTime.now();
+    final selectedYear = await getSelectedExamYear();
+    final examDate = calculateExamDate(selectedYear);
+    
+    // 計算時間差
+    final difference = examDate.difference(now);
+    
+    if (difference.inSeconds <= 0) {
+      return 0;
+    }
+    
+    // 計算天數
+    final days = difference.inDays;
+    final hours = difference.inHours.remainder(24);
+    
+    // 如果有剩餘小時，則天數向上取整（+1）
+    return hours > 0 ? days + 1 : days;
+  }
+  
   /// 取得會考年份的民國年
   Future<int> getExamRocYear() async {
     return await getSelectedExamYear();
